@@ -9,9 +9,7 @@ export const App = (): JSX.Element => {
 
   return (
     <SafeAreaView style={styles.background}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-      />
+      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
       <Home />
     </SafeAreaView>
   )
