@@ -7,20 +7,24 @@ import { labels } from '../../constants'
 import { styles } from './styles'
 
 export const Home = () => {
-  const [displayValue, setDisplayValue] = useState('0')
+  const [displayValue, setDisplayValue] = useState<string>('0')
+  const [currentValue, setCurrentValue] = useState<number>(0)
+  const [operation, setOperation] = useState<string>()
+  const [result, setResult] = useState<number>(0)
 
-  const addDigit = (
-    digit: string,
-    setDisplayValue: (displayValue: string) => void
-  ) => {
-    setDisplayValue(digit)
+  const addDigit = (digit: string) => {
+    if (digit === '.' && displayValue.includes('.')) {
+      return
+    }
+
+    setDisplayValue(displayValue === '0' ? digit : `${displayValue}${digit}`)
   }
 
   const cleanMemory = (setDisplayValue: (displayValue: string) => void) => {
     setDisplayValue('0')
   }
 
-  const setOperation = () => {}
+  const setOperation1 = () => {}
 
   return (
     <View style={styles.container}>
@@ -34,8 +38,8 @@ export const Home = () => {
               label.action === 'clear'
                 ? () => cleanMemory(setDisplayValue)
                 : label.action === 'digit'
-                ? () => addDigit(label.labelValue, setDisplayValue)
-                : () => setOperation()
+                ? () => addDigit(label.labelValue)
+                : () => setOperation1()
             }
             key={label.labelValue}
           />

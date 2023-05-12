@@ -74,11 +74,11 @@ export const labels: Label[] = [
   {
     labelValue: '0',
     action: 'digit',
-    type: 'defaultButton'
+    type: 'doubleButton'
   },
   {
     labelValue: '.',
-    action: 'operation',
+    action: 'digit',
     type: 'defaultButton'
   },
   {
