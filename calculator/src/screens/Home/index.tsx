@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { View } from 'react-native'
 import { Button } from '../../components/Button'
 import { Display } from '../../components/Display'
@@ -8,23 +8,37 @@ import { styles } from './styles'
 
 export const Home = () => {
   const [displayValue, setDisplayValue] = useState<string>('0')
-  const [currentValue, setCurrentValue] = useState<number>(0)
-  const [operation, setOperation] = useState<string>()
-  const [result, setResult] = useState<number>(0)
+  const [calculate, setCalculate] = useState<boolean>(false)
 
-  const addDigit = (digit: string) => {
-    if (digit === '.' && displayValue.includes('.')) {
+  useEffect(() => {
+    try {
+      const currentResult: number = eval(displayValue)
+      setDisplayValue(String(currentResult))
+      setCalculate(false)
+    } catch (error) {
+      cleanMemory()
+    }
+  }, [calculate])
+
+  const addDigit = (buttonDigit: string) => {
+    setDisplayValue(
+      displayValue === '0' ? buttonDigit : `${displayValue}${buttonDigit}`
+    )
+  }
+
+  const operationAction = (buttonOperation: string) => {
+    if (buttonOperation === '=') {
+      setCalculate(true)
       return
     }
 
-    setDisplayValue(displayValue === '0' ? digit : `${displayValue}${digit}`)
+    setDisplayValue(`${displayValue}${buttonOperation}`)
   }
 
-  const cleanMemory = (setDisplayValue: (displayValue: string) => void) => {
+  const cleanMemory = () => {
     setDisplayValue('0')
+    setCalculate(false)
   }
-
-  const setOperation1 = () => {}
 
   return (
     <View style={styles.container}>
@@ -36,10 +50,10 @@ export const Home = () => {
             label={label}
             handleCalculate={
               label.action === 'clear'
-                ? () => cleanMemory(setDisplayValue)
+                ? () => cleanMemory()
                 : label.action === 'digit'
                 ? () => addDigit(label.labelValue)
-                : () => setOperation1()
+                : () => operationAction(label.labelValue)
             }
             key={label.labelValue}
           />
